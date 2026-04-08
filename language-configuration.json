@@ -1,0 +1,33 @@
+{
+  "comments": {
+    "lineComment": "!"
+  },
+  "brackets": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"]
+  ],
+  "autoClosingPairs": [
+    { "open": "{", "close": "}" },
+    { "open": "[", "close": "]" },
+    { "open": "(", "close": ")" },
+    { "open": "\"", "close": "\"" }
+  ],
+  "surroundingPairs": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"],
+    ["\"", "\""]
+  ],
+  "folding": {
+    "markers": {
+      "start": "^(interface|vlan|router|class|policy|queue|spanning-tree|port-access|aaa|radius-server|tacacs-server|access-list|route-map|community-list|prefix-list|vrf|vsx|nvo|evpn|dhcp-server|mirror|user-role|copp-policy|captive-portal|banner|scheduler|snmp-server)\\b",
+      "end": "^!"
+    }
+  },
+  "indentationRules": {
+    "increaseIndentPattern": "^(interface|vlan|router|class|policy|queue|spanning-tree|port-access|aaa|radius-server|tacacs-server|access-list|route-map|community-list|prefix-list|vrf|vsx|nvo|evpn|dhcp-server|mirror|user-role|copp-policy|captive-portal|scheduler)\\b.*$",
+    "decreaseIndentPattern": "^\\s*!\\s*$"
+  },
+  "wordPattern": "[\\w\\-\\/\\.]+"
+}
