@@ -1,0 +1,873 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Aruba AOS-CX",
+  "scopeName": "source.aruba-cx",
+  "fileTypes": ["aoscx", "aoscxcfg"],
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#banner-block" },
+    { "include": "#description-line" },
+    { "include": "#interface-declaration" },
+    { "include": "#vlan-declaration" },
+    { "include": "#vrf-declaration" },
+    { "include": "#vsx-declaration" },
+    { "include": "#vxlan-declaration" },
+    { "include": "#evpn-declaration" },
+    { "include": "#nvo-declaration" },
+    { "include": "#router-declaration" },
+    { "include": "#acl-declaration" },
+    { "include": "#route-map-declaration" },
+    { "include": "#prefix-list-declaration" },
+    { "include": "#community-list-declaration" },
+    { "include": "#class-declaration" },
+    { "include": "#policy-declaration" },
+    { "include": "#copp-declaration" },
+    { "include": "#port-access-declaration" },
+    { "include": "#aaa-server" },
+    { "include": "#dhcp-declaration" },
+    { "include": "#mirror-declaration" },
+    { "include": "#user-role-declaration" },
+    { "include": "#scheduler-declaration" },
+    { "include": "#captive-portal-declaration" },
+    { "include": "#negation" },
+    { "include": "#acl-actions" },
+    { "include": "#protocol-keywords" },
+    { "include": "#interface-keywords" },
+    { "include": "#routing-keywords" },
+    { "include": "#vxlan-evpn-keywords" },
+    { "include": "#vsx-keywords" },
+    { "include": "#switching-keywords" },
+    { "include": "#security-keywords" },
+    { "include": "#qos-keywords" },
+    { "include": "#spanning-tree-keywords" },
+    { "include": "#system-keywords" },
+    { "include": "#dhcp-keywords" },
+    { "include": "#bfd-keywords" },
+    { "include": "#loop-protect-keywords" },
+    { "include": "#rd-rt-values" },
+    { "include": "#ip-address" },
+    { "include": "#ipv6-address" },
+    { "include": "#mac-address" },
+    { "include": "#interface-identifier" },
+    { "include": "#vlan-range" },
+    { "include": "#strings" },
+    { "include": "#constants" },
+    { "include": "#numbers" },
+    { "include": "#operators" }
+  ],
+  "repository": {
+
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.exclamation.aruba-cx",
+          "match": "^\\s*!.*$"
+        },
+        {
+          "name": "comment.line.hash.aruba-cx",
+          "match": "^\\s*#.*$"
+        }
+      ]
+    },
+
+    "banner-block": {
+      "patterns": [
+        {
+          "comment": "Multi-line banner (motd/login/exec)",
+          "name": "meta.banner.aruba-cx",
+          "begin": "^(banner)\\s+(motd|login|exec)\\s*(.)",
+          "end": "\\3",
+          "beginCaptures": {
+            "1": { "name": "keyword.control.banner.aruba-cx" },
+            "2": { "name": "constant.language.banner-type.aruba-cx" },
+            "3": { "name": "punctuation.definition.banner.aruba-cx" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.banner.aruba-cx" }
+          },
+          "contentName": "string.unquoted.banner.aruba-cx"
+        }
+      ]
+    },
+
+    "description-line": {
+      "patterns": [
+        {
+          "comment": "Description text treated as a string value",
+          "name": "meta.description.aruba-cx",
+          "match": "^(\\s+)(description)\\s+(.+)$",
+          "captures": {
+            "2": { "name": "keyword.other.description.aruba-cx" },
+            "3": { "name": "string.unquoted.description.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "interface-declaration": {
+      "patterns": [
+        {
+          "comment": "Physical interfaces: interface 1/1/1 or 1/1/1.100 (sub-interface)",
+          "name": "meta.interface.physical.aruba-cx",
+          "match": "^(interface)\\s+(\\d+/\\d+/\\d+(?:\\.\\d+)?)",
+          "captures": {
+            "1": { "name": "keyword.control.interface.aruba-cx" },
+            "2": { "name": "entity.name.type.interface.physical.aruba-cx" }
+          }
+        },
+        {
+          "comment": "VLAN interfaces: interface vlan 10",
+          "name": "meta.interface.vlan.aruba-cx",
+          "match": "^(interface)\\s+(vlan)\\s+(\\d+)",
+          "captures": {
+            "1": { "name": "keyword.control.interface.aruba-cx" },
+            "2": { "name": "storage.type.vlan.aruba-cx" },
+            "3": { "name": "entity.name.type.interface.vlan.aruba-cx" }
+          }
+        },
+        {
+          "comment": "LAG interfaces: interface lag N or lag N.100",
+          "name": "meta.interface.lag.aruba-cx",
+          "match": "^(interface)\\s+(lag)\\s+(\\d+(?:\\.\\d+)?)",
+          "captures": {
+            "1": { "name": "keyword.control.interface.aruba-cx" },
+            "2": { "name": "storage.type.lag.aruba-cx" },
+            "3": { "name": "entity.name.type.interface.lag.aruba-cx" }
+          }
+        },
+        {
+          "comment": "Loopback interfaces: interface loopback N",
+          "name": "meta.interface.loopback.aruba-cx",
+          "match": "^(interface)\\s+(loopback)\\s+(\\d+)",
+          "captures": {
+            "1": { "name": "keyword.control.interface.aruba-cx" },
+            "2": { "name": "storage.type.loopback.aruba-cx" },
+            "3": { "name": "entity.name.type.interface.loopback.aruba-cx" }
+          }
+        },
+        {
+          "comment": "Tunnel interfaces: interface tunnel N",
+          "name": "meta.interface.tunnel.aruba-cx",
+          "match": "^(interface)\\s+(tunnel)\\s+(\\d+)",
+          "captures": {
+            "1": { "name": "keyword.control.interface.aruba-cx" },
+            "2": { "name": "storage.type.tunnel.aruba-cx" },
+            "3": { "name": "entity.name.type.interface.tunnel.aruba-cx" }
+          }
+        },
+        {
+          "comment": "VXLAN interface: interface vxlan 1",
+          "name": "meta.interface.vxlan.aruba-cx",
+          "match": "^(interface)\\s+(vxlan)\\s+(\\d+)",
+          "captures": {
+            "1": { "name": "keyword.control.interface.aruba-cx" },
+            "2": { "name": "storage.type.vxlan.aruba-cx" },
+            "3": { "name": "entity.name.type.interface.vxlan.aruba-cx" }
+          }
+        },
+        {
+          "comment": "Management interface: interface mgmt",
+          "name": "meta.interface.mgmt.aruba-cx",
+          "match": "^(interface)\\s+(mgmt)",
+          "captures": {
+            "1": { "name": "keyword.control.interface.aruba-cx" },
+            "2": { "name": "storage.type.mgmt.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "vlan-declaration": {
+      "patterns": [
+        {
+          "comment": "VLAN range/list declaration: vlan 10,20,30-40",
+          "name": "meta.vlan.declaration.aruba-cx",
+          "match": "^(vlan)\\s+([\\d,\\-]+)",
+          "captures": {
+            "1": { "name": "storage.type.vlan.aruba-cx" },
+            "2": { "name": "entity.name.type.vlan.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "vrf-declaration": {
+      "patterns": [
+        {
+          "comment": "VRF top-level declaration: vrf NAME",
+          "name": "meta.vrf.declaration.aruba-cx",
+          "match": "^(vrf)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.vrf.aruba-cx" },
+            "2": { "name": "entity.name.type.vrf.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "vsx-declaration": {
+      "patterns": [
+        {
+          "comment": "VSX top-level block",
+          "name": "meta.vsx.declaration.aruba-cx",
+          "match": "^(vsx)\\b",
+          "captures": {
+            "1": { "name": "keyword.control.vsx.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "vxlan-declaration": {
+      "patterns": [
+        {
+          "comment": "Interface vxlan block (already in interface-declaration but also standalone sub-commands)",
+          "name": "meta.vxlan.declaration.aruba-cx",
+          "match": "^\\s*(source)\\s+(ip|interface)\\b",
+          "captures": {
+            "1": { "name": "keyword.other.vxlan.aruba-cx" },
+            "2": { "name": "keyword.other.vxlan.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "evpn-declaration": {
+      "patterns": [
+        {
+          "comment": "EVPN top-level block",
+          "name": "meta.evpn.declaration.aruba-cx",
+          "match": "^(evpn)\\b",
+          "captures": {
+            "1": { "name": "keyword.control.evpn.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "nvo-declaration": {
+      "patterns": [
+        {
+          "comment": "NVO (Network Virtualization Overlay): nvo N",
+          "name": "meta.nvo.declaration.aruba-cx",
+          "match": "^(nvo)\\s+(\\d+)",
+          "captures": {
+            "1": { "name": "keyword.control.nvo.aruba-cx" },
+            "2": { "name": "entity.name.type.nvo.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "router-declaration": {
+      "patterns": [
+        {
+          "comment": "OSPF: router ospf 1 [vrf NAME]",
+          "name": "meta.router.ospf.aruba-cx",
+          "match": "^(router)\\s+(ospf)\\s+(\\d+)(?:\\s+(vrf)\\s+([\\w\\-]+))?",
+          "captures": {
+            "1": { "name": "keyword.control.router.aruba-cx" },
+            "2": { "name": "entity.name.type.routing-protocol.aruba-cx" },
+            "3": { "name": "constant.numeric.process-id.aruba-cx" },
+            "4": { "name": "keyword.control.vrf.aruba-cx" },
+            "5": { "name": "entity.name.type.vrf.aruba-cx" }
+          }
+        },
+        {
+          "comment": "OSPFv3: router ospfv3 1 [vrf NAME]",
+          "name": "meta.router.ospfv3.aruba-cx",
+          "match": "^(router)\\s+(ospfv3)\\s+(\\d+)(?:\\s+(vrf)\\s+([\\w\\-]+))?",
+          "captures": {
+            "1": { "name": "keyword.control.router.aruba-cx" },
+            "2": { "name": "entity.name.type.routing-protocol.aruba-cx" },
+            "3": { "name": "constant.numeric.process-id.aruba-cx" },
+            "4": { "name": "keyword.control.vrf.aruba-cx" },
+            "5": { "name": "entity.name.type.vrf.aruba-cx" }
+          }
+        },
+        {
+          "comment": "BGP: router bgp 65000",
+          "name": "meta.router.bgp.aruba-cx",
+          "match": "^(router)\\s+(bgp)\\s+(\\d+)",
+          "captures": {
+            "1": { "name": "keyword.control.router.aruba-cx" },
+            "2": { "name": "entity.name.type.routing-protocol.aruba-cx" },
+            "3": { "name": "constant.numeric.as-number.aruba-cx" }
+          }
+        },
+        {
+          "comment": "RIP: router rip [vrf NAME]",
+          "name": "meta.router.rip.aruba-cx",
+          "match": "^(router)\\s+(rip)(?:\\s+(vrf)\\s+([\\w\\-]+))?",
+          "captures": {
+            "1": { "name": "keyword.control.router.aruba-cx" },
+            "2": { "name": "entity.name.type.routing-protocol.aruba-cx" },
+            "3": { "name": "keyword.control.vrf.aruba-cx" },
+            "4": { "name": "entity.name.type.vrf.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "acl-declaration": {
+      "patterns": [
+        {
+          "comment": "ACL declaration: access-list ip/ipv6/mac NAME",
+          "name": "meta.acl.declaration.aruba-cx",
+          "match": "^(access-list)\\s+(ip|ipv6|mac)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.acl.aruba-cx" },
+            "2": { "name": "storage.type.acl-type.aruba-cx" },
+            "3": { "name": "entity.name.type.acl.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "route-map-declaration": {
+      "patterns": [
+        {
+          "comment": "Route-map declaration: route-map NAME permit/deny SEQ",
+          "name": "meta.route-map.declaration.aruba-cx",
+          "match": "^(route-map)\\s+([\\w\\-]+)\\s+(permit|deny)\\s+(\\d+)",
+          "captures": {
+            "1": { "name": "keyword.control.route-map.aruba-cx" },
+            "2": { "name": "entity.name.type.route-map.aruba-cx" },
+            "3": { "name": "keyword.other.action.aruba-cx" },
+            "4": { "name": "constant.numeric.sequence.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "prefix-list-declaration": {
+      "patterns": [
+        {
+          "comment": "Prefix-list declaration",
+          "name": "meta.prefix-list.declaration.aruba-cx",
+          "match": "^(ip\\s+prefix-list)\\s+([\\w\\-]+)\\s+(seq)\\s+(\\d+)\\s+(permit|deny)",
+          "captures": {
+            "1": { "name": "keyword.control.prefix-list.aruba-cx" },
+            "2": { "name": "entity.name.type.prefix-list.aruba-cx" },
+            "3": { "name": "keyword.other.seq.aruba-cx" },
+            "4": { "name": "constant.numeric.sequence.aruba-cx" },
+            "5": { "name": "keyword.other.action.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "community-list-declaration": {
+      "patterns": [
+        {
+          "comment": "Community-list declaration",
+          "name": "meta.community-list.declaration.aruba-cx",
+          "match": "^(ip\\s+community-list)\\s+(standard|expanded)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.community-list.aruba-cx" },
+            "2": { "name": "storage.type.community-type.aruba-cx" },
+            "3": { "name": "entity.name.type.community-list.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "class-declaration": {
+      "patterns": [
+        {
+          "comment": "QoS class: class ip/ipv6/mac NAME",
+          "name": "meta.class.declaration.aruba-cx",
+          "match": "^(class)\\s+(ip|ipv6|mac)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.class.aruba-cx" },
+            "2": { "name": "storage.type.class-type.aruba-cx" },
+            "3": { "name": "entity.name.type.class.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "policy-declaration": {
+      "patterns": [
+        {
+          "comment": "QoS policy: policy NAME",
+          "name": "meta.policy.declaration.aruba-cx",
+          "match": "^(policy)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.policy.aruba-cx" },
+            "2": { "name": "entity.name.type.policy.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "copp-declaration": {
+      "patterns": [
+        {
+          "comment": "CoPP policy declaration",
+          "name": "meta.copp.declaration.aruba-cx",
+          "match": "^(copp-policy)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.copp.aruba-cx" },
+            "2": { "name": "entity.name.type.copp-policy.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "port-access-declaration": {
+      "patterns": [
+        {
+          "comment": "Port-access policy: port-access policy NAME",
+          "name": "meta.port-access.declaration.aruba-cx",
+          "match": "^(port-access)\\s+(policy|role|vlan-access-tunnel-profile|onboarding-profile|client-profile)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.port-access.aruba-cx" },
+            "2": { "name": "storage.type.port-access.aruba-cx" },
+            "3": { "name": "entity.name.type.port-access.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "aaa-server": {
+      "patterns": [
+        {
+          "comment": "RADIUS server host declaration",
+          "name": "meta.radius.declaration.aruba-cx",
+          "match": "^(radius-server)\\s+(host)\\s+(\\S+)",
+          "captures": {
+            "1": { "name": "keyword.control.radius.aruba-cx" },
+            "2": { "name": "storage.type.host.aruba-cx" },
+            "3": { "name": "entity.name.type.radius-host.aruba-cx" }
+          }
+        },
+        {
+          "comment": "TACACS+ server host declaration",
+          "name": "meta.tacacs.declaration.aruba-cx",
+          "match": "^(tacacs-server)\\s+(host)\\s+(\\S+)",
+          "captures": {
+            "1": { "name": "keyword.control.tacacs.aruba-cx" },
+            "2": { "name": "storage.type.host.aruba-cx" },
+            "3": { "name": "entity.name.type.tacacs-host.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "dhcp-declaration": {
+      "patterns": [
+        {
+          "comment": "DHCP server pool declaration",
+          "name": "meta.dhcp.server.aruba-cx",
+          "match": "^(dhcp-server)\\s+(pool)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.dhcp-server.aruba-cx" },
+            "2": { "name": "storage.type.pool.aruba-cx" },
+            "3": { "name": "entity.name.type.dhcp-pool.aruba-cx" }
+          }
+        },
+        {
+          "comment": "DHCP server vrf/option/enable",
+          "name": "meta.dhcp.server-global.aruba-cx",
+          "match": "^(dhcp-server)\\s+(vrf)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.dhcp-server.aruba-cx" },
+            "2": { "name": "keyword.control.vrf.aruba-cx" },
+            "3": { "name": "entity.name.type.vrf.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "mirror-declaration": {
+      "patterns": [
+        {
+          "comment": "Mirror session declaration",
+          "name": "meta.mirror.declaration.aruba-cx",
+          "match": "^(mirror)\\s+(session)\\s+(\\d+)",
+          "captures": {
+            "1": { "name": "keyword.control.mirror.aruba-cx" },
+            "2": { "name": "storage.type.session.aruba-cx" },
+            "3": { "name": "entity.name.type.mirror-session.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "user-role-declaration": {
+      "patterns": [
+        {
+          "comment": "User role declaration",
+          "name": "meta.user-role.declaration.aruba-cx",
+          "match": "^(user-role)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.user-role.aruba-cx" },
+            "2": { "name": "entity.name.type.user-role.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "scheduler-declaration": {
+      "patterns": [
+        {
+          "comment": "Scheduler job/schedule declaration",
+          "name": "meta.scheduler.declaration.aruba-cx",
+          "match": "^(scheduler)\\s+(job|schedule)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.scheduler.aruba-cx" },
+            "2": { "name": "storage.type.scheduler.aruba-cx" },
+            "3": { "name": "entity.name.type.scheduler.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "captive-portal-declaration": {
+      "patterns": [
+        {
+          "comment": "Captive portal profile declaration",
+          "name": "meta.captive-portal.declaration.aruba-cx",
+          "match": "^(captive-portal)\\s+(profile)\\s+([\\w\\-]+)",
+          "captures": {
+            "1": { "name": "keyword.control.captive-portal.aruba-cx" },
+            "2": { "name": "storage.type.profile.aruba-cx" },
+            "3": { "name": "entity.name.type.captive-portal.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "negation": {
+      "patterns": [
+        {
+          "comment": "Negation operator: no at start of line or after indentation",
+          "name": "keyword.operator.negation.aruba-cx",
+          "match": "^\\s*(no)\\s",
+          "captures": {
+            "1": { "name": "keyword.operator.negation.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "acl-actions": {
+      "patterns": [
+        {
+          "comment": "ACL permit/deny actions (indented, within ACL blocks)",
+          "name": "keyword.other.action.aruba-cx",
+          "match": "^\\s+(permit|deny)\\b"
+        }
+      ]
+    },
+
+    "protocol-keywords": {
+      "patterns": [
+        {
+          "comment": "Static route declarations",
+          "name": "meta.static-route.aruba-cx",
+          "match": "^\\s*(ip\\s+route|ipv6\\s+route)\\b",
+          "captures": {
+            "1": { "name": "keyword.control.static-route.aruba-cx" }
+          }
+        }
+      ]
+    },
+
+    "interface-keywords": {
+      "patterns": [
+        {
+          "comment": "Interface sub-commands",
+          "name": "keyword.other.interface.aruba-cx",
+          "match": "\\b(shutdown|speed|duplex|mtu|flowcontrol|ip\\s+address|ipv6\\s+address|ip\\s+helper-address|vlan\\s+access|vlan\\s+trunk\\s+native|vlan\\s+trunk\\s+allowed|routing|lacp\\s+mode|lag|apply\\s+policy|apply\\s+access-list|ip\\s+mtu|ip\\s+ospf|ip\\s+igmp|ip\\s+pim|ip\\s+arp\\s+timeout|split-horizon|lldp|qos\\s+trust|qos\\s+dscp|qos\\s+cos|port-access|vlan\\s+mode|ip\\s+proxy-arp|ip\\s+local-proxy-arp|ip\\s+directed-broadcast|ip\\s+unreachables|vsx-sync|active-gateway)\\b"
+        }
+      ]
+    },
+
+    "routing-keywords": {
+      "patterns": [
+        {
+          "comment": "OSPF sub-commands",
+          "name": "keyword.other.ospf.aruba-cx",
+          "match": "\\b(area|network|passive-interface|default-information\\s+originate|redistribute|router-id|reference-bandwidth|max-metric|auto-cost|distance|log-adjacency-changes|nssa|stub|totally-stub|default-metric|hello-interval|dead-interval|retransmit-interval|transmit-delay|interface-type|authentication|message-digest-key|ip\\s+ospf\\s+cost|ip\\s+ospf\\s+priority|ip\\s+ospf\\s+authentication|graceful-restart)\\b"
+        },
+        {
+          "comment": "BGP sub-commands",
+          "name": "keyword.other.bgp.aruba-cx",
+          "match": "\\b(neighbor|remote-as|peer-group|address-family|activate|next-hop-self|route-reflector-client|send-community|soft-reconfiguration|update-source|ebgp-multihop|password|timers|local-as|allowas-in|default-originate|maximum-paths|bestpath|confederation|dampening|aggregate-address|network|summary-only|as-override|remove-private-as|route-map\\s+in|route-map\\s+out|graceful-restart|bfd)\\b"
+        },
+        {
+          "comment": "Route-map sub-commands",
+          "name": "keyword.other.route-map.aruba-cx",
+          "match": "\\b(match|set|continue|on-match|ip\\s+address\\s+prefix-list|as-path|community|local-preference|metric|weight|origin|tag|next-hop|med)\\b"
+        }
+      ]
+    },
+
+    "vxlan-evpn-keywords": {
+      "patterns": [
+        {
+          "comment": "VXLAN/EVPN/NVO keywords",
+          "name": "keyword.other.vxlan-evpn.aruba-cx",
+          "match": "\\b(vni|vxlan|vtep|source-interface|tunnel-endpoint|flood-list|remote-vtep|nvo|evpn|vlan-bundle|rd|route-target|export|import|both|arp-suppression|nd-suppression|mac-only|ip-route|esi|designated-forwarder|multihoming|type-2|type-5|asymmetric|symmetric|integrated-routing-bridging|source\\s+ip|source\\s+interface|virtual-network)\\b"
+        }
+      ]
+    },
+
+    "vsx-keywords": {
+      "patterns": [
+        {
+          "comment": "VSX sub-commands and keywords",
+          "name": "keyword.other.vsx.aruba-cx",
+          "match": "\\b(inter-switch-link|keepalive|system-mac|role|primary|secondary|linkup-delay-timer|split-recovery|vsx-sync|active-gateway\\s+ip|active-gateway\\s+mac|virtual-mac|virtual-ip|isl-timers|config-consistency|software-update)\\b"
+        }
+      ]
+    },
+
+    "switching-keywords": {
+      "patterns": [
+        {
+          "comment": "Switching sub-commands",
+          "name": "keyword.other.switching.aruba-cx",
+          "match": "\\b(trunk|access|native|allowed|forbidden|name|voice|igmp|mld|snooping|querier|static-group|fast-leave|proxy|mrouter|storm-control|broadcast|multicast|unicast|level|lacp|mode|rate|min-links|hash|vsf|member|link|priority|stack|renumber|mac-address-table|aging-time|static|private-vlan|community|isolated|promiscuous|arp-inspection|dhcp-snooping|ip\\s+igmp|ip\\s+mld)\\b"
+        }
+      ]
+    },
+
+    "security-keywords": {
+      "patterns": [
+        {
+          "comment": "Security and AAA keywords",
+          "name": "keyword.other.security.aruba-cx",
+          "match": "\\b(aaa|authentication|authorization|accounting|login|exec|commands|dot1x|mac-auth|radius|tacacs|group|server-group|secret|key|encrypted|ciphertext|plaintext|enable|console|ssh|https-server|rest-api|vty|user|password|role|associate|reauthentication|eapol-timeout|max-retries|quiet-period|tx-period|server-timeout|client-timeout|auth-priority|auth-mode|critical-role|critical-vlan|reject-role|reject-vlan|cached-reauth|cached-reauth-period|port-access\\s+security|trust|dhcp-server|dynamic-authorization|coa|rfc-3576|nas-ip|accounting-interval|source-ip)\\b"
+        }
+      ]
+    },
+
+    "qos-keywords": {
+      "patterns": [
+        {
+          "comment": "QoS sub-commands and values",
+          "name": "keyword.other.qos.aruba-cx",
+          "match": "\\b(dscp|cos|dot1p|af[1-4][1-3]|cs[0-7]|ef|be|default|police|shape|queue|bandwidth|strict|dwrr|rate|burst|conform-action|exceed-action|violate-action|remark|count|schedule-profile|queue-profile|map|trust\\s+none|trust\\s+dscp|trust\\s+cos|priority|percent|kbps|mbps|gbps|pps)\\b"
+        }
+      ]
+    },
+
+    "spanning-tree-keywords": {
+      "patterns": [
+        {
+          "comment": "Spanning tree sub-commands",
+          "name": "keyword.other.spanning-tree.aruba-cx",
+          "match": "\\b(spanning-tree|mstp|rstp|rpvst|stp|instance|priority|cost|port-type|admin-edge|bpdu-guard|bpdu-filter|root-guard|loop-guard|tcn-guard|hello-time|forward-delay|max-age|max-hops|config-name|config-revision|vlan-mapping|admin-edge-port|point-to-point|designated|alternate|backup|root|edge)\\b"
+        }
+      ]
+    },
+
+    "system-keywords": {
+      "patterns": [
+        {
+          "comment": "System-level keywords",
+          "name": "keyword.other.system.aruba-cx",
+          "match": "\\b(hostname|ntp\\s+server|ntp\\s+authentication-key|ntp\\s+trusted-key|ntp\\s+vrf|logging|severity|facility|trap|snmp-server|community|contact|location|traps|inform|clock\\s+timezone|ip\\s+dns|ip\\s+domain-name|ip\\s+name-server|ip\\s+source-interface|https-server|rest-api|ssh\\s+server|ssh\\s+client|boot\\s+system|image|checkpoint|copy|startup-config|running-config|erase|reload|write\\s+memory|service|aruba-central|ztp|vsf|fabric)\\b"
+        },
+        {
+          "comment": "SNMP v3 and extended SNMP keywords",
+          "name": "keyword.other.snmp.aruba-cx",
+          "match": "\\b(snmp-server\\s+host|snmp-server\\s+user|snmp-server\\s+group|snmp-server\\s+view|auth|priv|noauth|nopriv|authpriv|authnopriv|v1|v2c|v3|read|write|notify|access|context|oid|included|excluded)\\b"
+        },
+        {
+          "comment": "System resource and hardware keywords",
+          "name": "keyword.other.hardware.aruba-cx",
+          "match": "\\b(system\\s+interface-group|resource\\s+profile|hardware\\s+capacity|fan|temp|power-supply|redundancy|module|slot|led|locator|usb|partition|primary|secondary)\\b"
+        }
+      ]
+    },
+
+    "dhcp-keywords": {
+      "patterns": [
+        {
+          "comment": "DHCP sub-commands",
+          "name": "keyword.other.dhcp.aruba-cx",
+          "match": "\\b(range|default-router|dns-server|lease|domain-name|option|authoritative|bootp|static-bind|ip-address|hardware-address|ip\\s+dhcp-relay|hop-count-increment|dhcp-relay|ip\\s+bootp-gateway)\\b"
+        }
+      ]
+    },
+
+    "bfd-keywords": {
+      "patterns": [
+        {
+          "comment": "BFD (Bidirectional Forwarding Detection) keywords",
+          "name": "keyword.other.bfd.aruba-cx",
+          "match": "\\b(bfd|detect-multiplier|min-rx|min-tx|min-echo-rx|echo|single-hop|multi-hop)\\b"
+        }
+      ]
+    },
+
+    "loop-protect-keywords": {
+      "patterns": [
+        {
+          "comment": "Loop-protect / UDLD / NDP keywords",
+          "name": "keyword.other.protection.aruba-cx",
+          "match": "\\b(loop-protect|udld|ipv6\\s+nd|ra-guard|nd-guard|dhcpv6-guard|nd\\s+router-advertisement|nd\\s+ra|nd\\s+managed-config|nd\\s+other-config|nd\\s+prefix|nd\\s+suppress-ra|nd\\s+reachable-time|nd\\s+retransmit-timer|nd\\s+hop-limit)\\b"
+        }
+      ]
+    },
+
+    "rd-rt-values": {
+      "patterns": [
+        {
+          "comment": "Route Distinguisher / Route Target values (ASN:NN or IP:NN)",
+          "name": "constant.numeric.rd-rt.aruba-cx",
+          "match": "\\b(\\d{1,10}:\\d{1,10})\\b"
+        }
+      ]
+    },
+
+    "ip-address": {
+      "patterns": [
+        {
+          "comment": "IPv4 address with CIDR prefix length",
+          "name": "meta.ip-cidr.aruba-cx",
+          "match": "\\b((?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?))/(\\d{1,2})\\b",
+          "captures": {
+            "1": { "name": "constant.numeric.ip-address.aruba-cx" },
+            "2": { "name": "constant.numeric.prefix-length.aruba-cx" }
+          }
+        },
+        {
+          "comment": "IPv4 address with dotted subnet mask",
+          "name": "meta.ip-with-mask.aruba-cx",
+          "match": "\\b((?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?))\\s+((?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?))\\b",
+          "captures": {
+            "1": { "name": "constant.numeric.ip-address.aruba-cx" },
+            "2": { "name": "constant.numeric.subnet-mask.aruba-cx" }
+          }
+        },
+        {
+          "comment": "Standalone IPv4 address",
+          "name": "constant.numeric.ip-address.aruba-cx",
+          "match": "\\b(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\b"
+        },
+        {
+          "comment": "OSPF area in dotted notation (0.0.0.X)",
+          "name": "constant.numeric.ospf-area.aruba-cx",
+          "match": "\\b(?:0\\.){3}\\d+\\b"
+        }
+      ]
+    },
+
+    "ipv6-address": {
+      "patterns": [
+        {
+          "comment": "IPv6 address with optional prefix length",
+          "name": "constant.numeric.ipv6-address.aruba-cx",
+          "match": "\\b([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}(?:/(\\d{1,3}))?\\b"
+        }
+      ]
+    },
+
+    "mac-address": {
+      "patterns": [
+        {
+          "comment": "MAC address colon-separated (aa:bb:cc:dd:ee:ff)",
+          "name": "constant.numeric.mac-address.aruba-cx",
+          "match": "\\b([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}\\b"
+        },
+        {
+          "comment": "MAC address dot-separated (aabb.ccdd.eeff)",
+          "name": "constant.numeric.mac-address.aruba-cx",
+          "match": "\\b([0-9a-fA-F]{4}\\.){2}[0-9a-fA-F]{4}\\b"
+        },
+        {
+          "comment": "MAC address dash-separated (aa-bb-cc-dd-ee-ff)",
+          "name": "constant.numeric.mac-address.aruba-cx",
+          "match": "\\b([0-9a-fA-F]{2}-){5}[0-9a-fA-F]{2}\\b"
+        }
+      ]
+    },
+
+    "interface-identifier": {
+      "patterns": [
+        {
+          "comment": "Physical port format X/Y/Z or X/Y/Z.sub (used inline)",
+          "name": "entity.name.type.interface.physical.inline.aruba-cx",
+          "match": "\\b(\\d+/\\d+/\\d+(?:\\.\\d+)?)\\b"
+        }
+      ]
+    },
+
+    "vlan-range": {
+      "patterns": [
+        {
+          "comment": "VLAN range/list (e.g. 10,20,30-40)",
+          "name": "constant.numeric.vlan-range.aruba-cx",
+          "match": "\\b(\\d{1,4}(?:[,\\-]\\d{1,4})+)\\b"
+        }
+      ]
+    },
+
+    "strings": {
+      "patterns": [
+        {
+          "comment": "Double-quoted string",
+          "name": "string.quoted.double.aruba-cx",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.aruba-cx",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+
+    "constants": {
+      "patterns": [
+        {
+          "comment": "Boolean-like keywords",
+          "name": "constant.language.boolean.aruba-cx",
+          "match": "\\b(enable|disable|up|down|active|passive|forced|auto|true|false|on|off)\\b"
+        },
+        {
+          "comment": "ACL wildcard / protocol keywords",
+          "name": "constant.language.wildcard.aruba-cx",
+          "match": "\\b(any|host|established|log|log-input)\\b"
+        },
+        {
+          "comment": "Protocol names in ACLs and general",
+          "name": "constant.language.protocol.aruba-cx",
+          "match": "\\b(tcp|udp|icmp|icmpv6|esp|ah|gre|ip|ipv6|proto|sctp|pim|vrrp|igmp|mld|ospf|eigrp)\\b"
+        },
+        {
+          "comment": "Direction keywords",
+          "name": "constant.language.direction.aruba-cx",
+          "match": "\\b(in|out|ingress|egress)\\b"
+        }
+      ]
+    },
+
+    "numbers": {
+      "patterns": [
+        {
+          "comment": "Standalone integers",
+          "name": "constant.numeric.integer.aruba-cx",
+          "match": "(?<![\\w\\.:/])\\b(\\d+)\\b(?![\\w\\.:/])"
+        }
+      ]
+    },
+
+    "operators": {
+      "patterns": [
+        {
+          "comment": "Comparison operators (used in ACLs / class-maps)",
+          "name": "keyword.operator.comparison.aruba-cx",
+          "match": "\\b(eq|neq|lt|gt|range|ge|le)\\b"
+        }
+      ]
+    }
+  }
+}
